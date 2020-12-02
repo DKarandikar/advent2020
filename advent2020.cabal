@@ -53,6 +53,7 @@ library
       Day24
       Day25
       Lib
+      Utils
   other-modules:
       Paths_advent2020
   hs-source-dirs:
