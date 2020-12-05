@@ -14,3 +14,8 @@ lastN n xs = drop (length xs - n) xs
 -- Get all but the last N of a list
 firstMinusN :: Int -> [a] -> [a]
 firstMinusN n xs = take (length xs - n) xs
+
+removeItem :: Eq a => a -> [a] -> [a]
+removeItem _ []                 = []
+removeItem x (y:ys) | x == y    = removeItem x ys
+                    | otherwise = y : removeItem x ys
