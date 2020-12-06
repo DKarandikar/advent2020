@@ -18,20 +18,11 @@ day4part2 = do
 
 
 getPassports :: String -> [Passport]
-getPassports i =  accumWords [] (lines i)
+getPassports i = map (\passportLines -> concat [ getKeyValues line | line <- passportLines]) (groupLines i)
 
 
-accumWords :: [KeyValue] -> [String] -> [Passport]
-accumWords soFar ls = 
-    case ls of 
-        [] ->  [soFar]
-        _ -> 
-            let 
-                s:ss = ls
-            in
-                case s of 
-                    "" -> soFar : accumWords [] ss 
-                    _ -> accumWords ([(head x, x !! 1 ) | x <- map (split (==':')) (words s)] ++ soFar) ss
+getKeyValues :: String -> [KeyValue]
+getKeyValues line = [(head x, x !! 1 ) | x <- map (split (==':')) (words line)]
 
 
 checkNumKeys:: Passport -> Bool
