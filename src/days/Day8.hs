@@ -2,65 +2,66 @@ module Day8 where
 
 import Control.Monad.State
 
+data Op = Acc Int | Jmp Int | Nop Int deriving (Show, Eq)
+
 type S = State ([Int], Int)
 
 day8part1 :: IO ()
 day8part1 = do
     input <- readFile "input/day8input.txt"
-    let ls = lines input
+    let ls = map parseLineToOp (lines input)
     let res = execState (eval ls 0) ([], 0)
-    print $ fst res
-    print $ snd res
-
-
-eval:: [String] -> Int -> S Bool
-eval prog line = do
-    let nextLine = line
-    (visited, acc) <- get
-
-    if line `elem` visited then return False else
-        if line >= length prog then return True else
-            let 
-                a = words (prog!!nextLine)
-                op = head a
-                arg = a!!1
-            in  
-                case op of
-                    "nop" -> do
-                        put (visited ++ [line], acc)
-                        eval prog (line+1)
-                    "jmp" -> do
-                        put (visited ++ [line], acc)
-                        eval prog (line + read (if '+' `elem` arg then drop 1 arg else arg))
-                    "acc" -> do
-                        put (visited ++ [line], acc + read (if '+' `elem` arg then drop 1 arg else arg))
-                        eval prog (line + 1)
-                    _ -> error ""
-
+    print res
 
 day8part2 :: IO ()
 day8part2 = do
     input <- readFile "input/day8input.txt"
     let ls = lines input
-    let progs = [getSwitch x ls | x <- [0..length ls]]
-    print $ [runProg prog | prog <- progs]
+    let progs = [getSwitch x (map parseLineToOp ls) | x <- [0..length ls]]
+    print $ head $ dropWhile (==([], 0)) [runProg prog | prog <- progs]
 
-runProg:: [String] -> ([Int], Int)
+
+parseLineToOp:: String -> Op
+parseLineToOp x = 
+    let 
+        a = words x
+        op = head a
+        arg = a!!1
+        argVal = read (if '+' `elem` arg then drop 1 arg else arg) :: Int
+    in  
+        case op of 
+            "nop" -> Nop argVal
+            "jmp" -> Jmp argVal
+            "acc" -> Acc argVal
+            _ -> error $ "Invalid progline: " ++ x
+
+
+eval:: [Op] -> Int -> S Bool
+eval prog line = do
+    (visited, acc) <- get
+    if line `elem` visited then return False else
+        if line >= length prog then return True else
+            case prog!!line of
+                Nop _ -> do
+                    put (visited ++ [line], acc)
+                    eval prog (line+1)
+                Jmp val -> do
+                    put (visited ++ [line], acc)
+                    eval prog (line + val)
+                Acc val -> do
+                    put (visited ++ [line], acc + val)
+                    eval prog (line + 1)
+
+
+runProg:: [Op] -> ([Int], Int)
 runProg prog = if evalState (eval prog 0) ([], 0) then execState (eval prog 0) ([], 0) else ([], 0)
 
 
-getSwitch :: Int -> [String] -> [String]
-getSwitch _ [] = []
-getSwitch n (x:xs)
-    | n == 0 = 
-        let 
-            a = words x
-            op = head a
-            arg = a!!1
+getSwitch :: Int -> [Op] -> [Op]
+getSwitch n xs = let
+        newVal = case xs!!n of
+            Jmp val -> Nop val
+            Nop val -> Jmp val
+            Acc val -> Acc val
         in 
-            case op of
-                "jmp" -> ("nop" ++ " " ++ arg):xs
-                "nop" -> ("jmp" ++ " " ++ arg):xs
-                _ -> x:xs
-
-    | otherwise = x:getSwitch (n-1) xs
+            take n xs ++ [newVal] ++ drop (n+1) xs
