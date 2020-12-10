@@ -1,7 +1,7 @@
 module Day10 where
 
 import Utils ( counts )
-import Data.List ( group, sort )
+import Data.List ( sort )
 
 day10part1 :: IO ()
 day10part1 = do
@@ -16,23 +16,25 @@ day10part2 :: IO ()
 day10part2 = do
     input <- readFile "input/day10input.txt"
     let ls = map (\x -> read x :: Int) (lines input) ++ [0]
-    let sorted = sort ls
-    let groups = group $ zipWith (-) (tail sorted) sorted
-
-    -- The input is easier than the problem as stated, there are no diffs of 2
-    -- Runs of 3 are boring, there's one path through them
-    -- Runs of 1 can be reordered according to the tribonacci number of their length
-
-    let run1Perms = map ((tribonacci!!) . length) $ filter (\(x:_) -> x == 1) groups
-
-    print $ product run1Perms
+    print $ do10Part2 $ sort ls
 
 
-tribonacci:: [Integer]
-tribonacci = 1 : 1 : 2 : zipWith3 (\x y z -> x+y+z) tribonacci (tail tribonacci) (tail $ tail tribonacci)
-   
+do10Part2 :: [Int] -> Int
+do10Part2 xs = snd $ last $ foldl f [] xs
 
-headOrNo :: Num p => [p] -> Int -> p
-headOrNo cs z = 
-    let a = drop z cs in
-    if not (null a) then head a else 0
+f :: [(Int, Int)] -> Int -> [(Int, Int)]
+f xs a = xs ++ [( a, max 1 (sum $ map snd (dropWhile ((<a-3) . fst) xs)) )]
+
+-- e.g. 0 1 4 5 6 7 9 ...
+-- ([(number, routes)] -> Int -> [[(number, routes)]) -> [[(number, routes)] -> [Int] -> [(number, routes)]
+-- 0,1 - 1,1 - 4,1 - 5,1 - 6,2 - 7,4 - 9,6
+
+-- Ways to 9 are get to 6 and jump 3 or get to 7 and jump 2
+
+-- 0146  9
+-- 01456 9
+
+-- 0145679
+-- 01467 9
+-- 0147  9
+-- 01457 9
