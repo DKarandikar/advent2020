@@ -54,3 +54,13 @@ groupLines' soFar ls =
                 case s of 
                     "" -> soFar ++ groupLines' [] ss 
                     _ -> groupLines' ((if not (null soFar) then head soFar ++ [s] else [s]) : drop 1 soFar) ss
+
+
+converge :: (a -> a -> Bool) -> [a] -> a
+converge p (x:ys@(y:_))
+    | p x y     = y
+    | otherwise = converge p ys
+
+-- Apply f on a iteratively until f^(n+1)(a) = f^(n)(a)
+runTilEqual:: Eq a => (a -> a) -> a -> a
+runTilEqual f = converge (==) . iterate f
