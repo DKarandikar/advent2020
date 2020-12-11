@@ -36,7 +36,10 @@ charToState c
 
 
 getSeatMap :: String -> SeatMap
-getSeatMap input = M.fromList [((x, lineNo), charToState $ (lines input!!lineNo)!!x) | lineNo <- [0 .. length (lines input) -1], x <- [0.. length (lines input!!lineNo) - 1]]
+getSeatMap input = M.fromList [
+        ((x, y), charToState $ (ls!!y)!!x)
+        | let ls = lines input, y <- [0 .. length ls -1 ], x <- [0.. length (ls!!y) - 1]
+    ]
 
 
 applyStep :: (Coord -> SeatMap -> (Coord, SeatLocState)) -> SeatMap -> SeatMap
@@ -85,6 +88,7 @@ getNextStateP2 (x, y) smap =
 getVisible :: Coord -> SeatMap -> [Coord]
 getVisible (x, y) smap =  
         let 
-            vs = [ head $ dropWhile ((== Floor) . (`getSeatState` smap)) [(x + n*x', y + n*y') | n <- [1..]] | (x', y') <- dirs]
+            getFirstNonFloor = head . dropWhile ((== Floor) . (`getSeatState` smap))
+            vs = [ getFirstNonFloor [(x + n*x', y + n*y') | n <- [1..]] | (x', y') <- dirs]
         in 
             filter (\z-> getSeatState z smap /= Invalid) vs   
