@@ -1,8 +1,15 @@
 module Day12 where
 
-data CardinalDir = North | East | West | South deriving (Show, Eq)
+data CardinalDir = North | East | South | West deriving (Show, Eq, Enum, Bounded)
 
 type ShipState = (CardinalDir, (Int, Int))
+type ShipWaypointState = ((Int, Int), (Int, Int))
+
+turn :: (Enum a, Bounded a) => Int -> a -> a
+turn n e = toEnum (add (fromEnum (maxBound `asTypeOf` e) + 1) (fromEnum e) n)
+    where
+      add mod x y = (x + y + mod) `rem` mod
+
 
 day12part1 :: IO ()
 day12part1 = do
@@ -11,6 +18,14 @@ day12part1 = do
     print res
     print $ abs (fst $ snd res) + abs (snd $ snd res)
     
+
+day12part2 :: IO ()
+day12part2 = do
+    input <- readFile "input/day12input.txt"
+    let res = foldl handleLine2 ((10,1), (0,0)) (lines input)
+    print res
+    print $ abs (fst $ snd res) + abs (snd $ snd res)
+
 
 handleLine:: ShipState -> String -> ShipState
 handleLine (orientation, (locX, locY)) instruction = 
@@ -32,63 +47,11 @@ handleLine (orientation, (locX, locY)) instruction =
             'L' -> (getAntiClockwiseTurn orientation val, (locX, locY))
 
 getClockwiseTurn :: CardinalDir -> Int -> CardinalDir
-getClockwiseTurn dir val =
-    case dir of
-        North -> case val of
-            90 -> East
-            180 -> South
-            270 -> West
-            360 -> North
-        East -> case val of
-            90 -> South
-            180 -> West
-            270 -> North
-            360 -> East
-        South -> case val of
-            90 -> West
-            180 -> North
-            270 -> East
-            360 -> South
-        West -> case val of
-            90 -> North
-            180 -> East
-            270 -> South
-            360 -> West
+getClockwiseTurn dir val = turn (val `div` 90) dir
 
 getAntiClockwiseTurn :: CardinalDir -> Int -> CardinalDir
-getAntiClockwiseTurn dir val =
-    case dir of
-        North -> case val of
-            270 -> East
-            180 -> South
-            90 -> West
-            360 -> North
-        East -> case val of
-            270 -> South
-            180 -> West
-            90 -> North
-            360 -> East
-        South -> case val of
-            270 -> West
-            180 -> North
-            90 -> East
-            360 -> South
-        West -> case val of
-            270 -> North
-            180 -> East
-            90 -> South
-            360 -> West
+getAntiClockwiseTurn dir val = turn ( negate (val `div` 90)) dir
 
-type ShipWaypointState = ((Int, Int), (Int, Int))
-
-
-day12part2 :: IO ()
-day12part2 = do
-    input <- readFile "input/day12input.txt"
-    let res = foldl handleLine2 ((10,1), (0,0)) (lines input)
-    print res
-    print $ abs (fst $ snd res) + abs (snd $ snd res)
-    
 
 handleLine2:: ShipWaypointState -> String -> ShipWaypointState
 handleLine2 ((locXW, locYW), (locX, locY)) instruction = 
