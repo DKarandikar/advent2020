@@ -1,7 +1,7 @@
 module Day13 where
 
 import Utils (split )
-import Math.NumberTheory.Moduli.Chinese ( chineseRemainder )
+import CRT ( crt )
 
 day13part1 :: IO ()
 day13part1 = do
@@ -33,7 +33,7 @@ day13part2 = do
     let constraints = filter (/= (0,0)) $ map (getCons buses) [0..length buses - 1]
     print constraints
     
-    print $ chineseRemainder constraints
+    print $ crt constraints
 
 getCons :: [String] -> Int -> (Integer ,Integer)
 getCons buses id = 
