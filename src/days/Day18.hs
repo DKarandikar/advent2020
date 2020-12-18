@@ -42,5 +42,19 @@ eval x (('+', x'):xs) = eval (x + x') xs
 eval x (('*', x'):xs) = eval (x * x') xs
 
 
+expr2 :: Parser Int
+expr2 = pure eval <*> timesexpr <*> many (pure (,) <*> (char '*') <*> timesexpr)
+
+timesexpr :: Parser Int
+timesexpr = pure eval <*> term2 <*> many (pure (,) <*> (char '+') <*> term2)
+
+term2 :: Parser Int 
+term2 = pure f <*> optional (char '-') <*> (decimal <|> between (char '(') (char ')') expr2)
+    where 
+        f Nothing x = x 
+        f _ x = negate x
+
 day18part2 :: IO ()
-day18part2 = putStrLn "TODO"
+day18part2 = do
+    input <- readFile "input/day18input.txt"
+    print $ sum [getNum $ parse expr2 "" (removeSpaces l) | l <- lines input]
