@@ -36,7 +36,7 @@ counts input = M.toList $ M.fromListWith (+) [(c, 1) | c <- input]
 
 -- Remove duplicates from input in O(nlogn)
 removeDups :: (Ord a) => [a] -> [a]
-removeDups = map head . group . sort
+removeDups = map head . Data.List.group . sort
 
 
 -- 
@@ -64,3 +64,11 @@ converge p (x:ys@(y:_))
 -- Apply f on a iteratively until f^(n+1)(a) = f^(n)(a)
 runTilEqual:: Eq a => (a -> a) -> a -> a
 runTilEqual f = converge (==) . iterate f
+
+
+-- Group a list of things into a list of lists of things of length Int
+group :: Int -> [a] -> [[a]]
+group _ [] = []
+group n l
+  | n > 0 = take n l : Utils.group n (drop n l)
+  | otherwise = error "Negative or zero n"
