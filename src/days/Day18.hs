@@ -8,8 +8,14 @@ import Control.Applicative (optional, (<|>), many)
 
 day18part1 :: IO ()
 day18part1 = do
-    input <- readFile "input/day18input.txt"
-    print $ sum [getNum $ parse expr "" (removeSpaces l) | l <- lines input]
+    input <- lines . removeSpaces <$> readFile "input/day18input.txt"
+    print $ sum [getNum $ parse expr "" l | l <- input]
+
+day18part2 :: IO ()
+day18part2 = do
+    input <- lines . removeSpaces <$> readFile "input/day18input.txt"
+    print $ sum [getNum $ parse expr2 "" l | l <- input]
+
 
 getNum :: Either a Int -> Int 
 getNum c = case c of
@@ -19,42 +25,25 @@ getNum c = case c of
 removeSpaces :: String -> String
 removeSpaces s = [c | c <- s, c /= ' ']
 
-
-atoi :: [Char] -> Int 
-atoi = foldl f 0 where 
-    f s x = 10*s + digitToInt x
- 
-decimal :: Parser Int 
-decimal = atoi <$> many1 digit
+num :: Parser Int 
+num = read <$> many1 digit
 
 expr :: Parser Int
-expr = pure eval <*> term <*> many (pure (,) <*> (char '+' <|> char '*') <*> term)
+expr = eval <$> term <*> many ((,) <$> (char '+' <|> char '*') <*> term)
 
 term :: Parser Int 
-term = pure f <*> optional (char '-') <*> (decimal <|> between (char '(') (char ')') expr)
-    where 
-        f Nothing x = x 
-        f _ x = negate x
+term = num <|> between (char '(') (char ')') expr
+
+expr2 :: Parser Int
+expr2 = eval <$> timesexpr <*> many ((,) <$> char '*' <*> timesexpr)
+
+timesexpr :: Parser Int
+timesexpr = eval <$> term2 <*> many ((,) <$> char '+' <*> term2)
+
+term2 :: Parser Int 
+term2 = num <|> between (char '(') (char ')') expr2
 
 eval :: Int -> [(Char,Int)] -> Int 
 eval x [] = x 
-eval x (('+', x'):xs) = eval (x + x') xs
+eval x (('+', x'):xs) = eval (x + x') xs  -- for right-assoc do x + eval x' xs
 eval x (('*', x'):xs) = eval (x * x') xs
-
-
-expr2 :: Parser Int
-expr2 = pure eval <*> timesexpr <*> many (pure (,) <*> (char '*') <*> timesexpr)
-
-timesexpr :: Parser Int
-timesexpr = pure eval <*> term2 <*> many (pure (,) <*> (char '+') <*> term2)
-
-term2 :: Parser Int 
-term2 = pure f <*> optional (char '-') <*> (decimal <|> between (char '(') (char ')') expr2)
-    where 
-        f Nothing x = x 
-        f _ x = negate x
-
-day18part2 :: IO ()
-day18part2 = do
-    input <- readFile "input/day18input.txt"
-    print $ sum [getNum $ parse expr2 "" (removeSpaces l) | l <- lines input]
