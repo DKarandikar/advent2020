@@ -1,0 +1,71 @@
+	Wed Dec 23 08:09 2020 Time and Allocation Profiling Report  (Final)
+
+	   advent2020-exe +RTS -N -p -RTS
+
+	total time  =       11.28 secs   (41811 ticks @ 1000 us, 8 processors)
+	total alloc = 43,399,253,992 bytes  (excludes profiling overheads)
+
+COST CENTRE              MODULE    SRC                               %time %alloc
+
+lookupOrError            Day23     src/days/Day23.hs:(71,1)-(73,32)   48.4    2.2
+doMoveMap                Day23     src/days/Day23.hs:(45,1)-(67,53)   17.5   24.4
+doMoveMap.m'''           Day23     src/days/Day23.hs:64:9-59          10.6   21.9
+doMoveMap.m''            Day23     src/days/Day23.hs:62:9-53          10.4   21.9
+doMoveMap.m'             Day23     src/days/Day23.hs:59:9-42           7.7   21.6
+doMoveMap.destinationVal Day23     src/days/Day23.hs:55:9-143          2.8    3.2
+getStartingMap           Day23     src/days/Day23.hs:34:1-198          1.2    3.6
+iterate'                 Utils     src/Utils.hs:80:1-43                0.8    1.3
+
+
+                                                                                                         individual      inherited
+COST CENTRE                    MODULE                SRC                              no.     entries  %time %alloc   %time %alloc
+
+MAIN                           MAIN                  <built-in>                       188          0    0.0    0.0   100.0  100.0
+ CAF                           GHC.Conc.Signal       <entire-module>                  302          0    0.0    0.0     0.0    0.0
+ CAF                           GHC.IO.Encoding       <entire-module>                  286          0    0.0    0.0     0.0    0.0
+ CAF                           GHC.IO.Encoding.Iconv <entire-module>                  284          0    0.0    0.0     0.0    0.0
+ CAF                           GHC.IO.Handle.FD      <entire-module>                  276          0    0.0    0.0     0.0    0.0
+ CAF                           GHC.IO.Handle.Text    <entire-module>                  274          0    0.0    0.0     0.0    0.0
+ CAF                           GHC.Event.Thread      <entire-module>                  236          0    0.0    0.0     0.0    0.0
+ CAF                           GHC.Event.Poll        <entire-module>                  206          0    0.0    0.0     0.0    0.0
+ CAF:day23part2                Day23                 src/days/Day23.hs:37:1-10        348          0    0.0    0.0     0.0    0.0
+  day23part2                   Day23                 src/days/Day23.hs:(37,1)-(41,26) 377          1    0.0    0.0     0.0    0.0
+ CAF:day23part2_p              Day23                 <no location info>               346          0    0.0    0.0     0.0    0.0
+  day23part2                   Day23                 src/days/Day23.hs:(37,1)-(41,26) 381          0    0.0    0.0     0.0    0.0
+   day23part2.two              Day23                 src/days/Day23.hs:39:9-59        382          1    0.0    0.0     0.0    0.0
+    lookupOrError              Day23                 src/days/Day23.hs:(71,1)-(73,32) 383          1    0.0    0.0     0.0    0.0
+ CAF:day23part2_res            Day23                 src/days/Day23.hs:38:9-11        344          0    0.0    0.0   100.0  100.0
+  day23part2                   Day23                 src/days/Day23.hs:(37,1)-(41,26) 387          0    0.0    0.0   100.0  100.0
+   day23part2.res              Day23                 src/days/Day23.hs:38:9-71        388          1    0.1    0.0   100.0  100.0
+    iterate'                   Utils                 src/Utils.hs:80:1-43             392   10000001    0.8    1.3    98.7   96.4
+     doMoveMap                 Day23                 src/days/Day23.hs:(45,1)-(67,53) 393   10000000   17.5   24.4    98.0   95.2
+      doMoveMap.current        Day23                 src/days/Day23.hs:48:9-33        402   10000000    0.0    0.0     0.0    0.0
+      doMoveMap.currentHead    Day23                 src/days/Day23.hs:47:9-66        394   10000000    0.2    0.0    12.8    0.7
+       lookupOrError           Day23                 src/days/Day23.hs:(71,1)-(73,32) 395   20000000   12.6    0.7    12.6    0.7
+      doMoveMap.dest           Day23                 src/days/Day23.hs:56:9-45        405   10000000    0.1    0.0     4.6    0.4
+       lookupOrError           Day23                 src/days/Day23.hs:(71,1)-(73,32) 406   10000000    4.5    0.4     4.5    0.4
+      doMoveMap.destinationVal Day23                 src/days/Day23.hs:55:9-143       403   10000000    2.8    3.2     2.8    3.2
+      doMoveMap.m'             Day23                 src/days/Day23.hs:59:9-42        407   10000000    7.7   21.6     7.7   21.6
+      doMoveMap.m''            Day23                 src/days/Day23.hs:62:9-53        408   10000000   10.4   21.9    10.4   21.9
+      doMoveMap.m'''           Day23                 src/days/Day23.hs:64:9-59        409   10000000   10.6   21.9    10.6   21.9
+      doMoveMap.removedVals    Day23                 src/days/Day23.hs:53:9-55        404   10000000    0.0    0.0     0.0    0.0
+      doMoveMap.val2           Day23                 src/days/Day23.hs:49:9-48        396   10000000    0.1    0.0    10.4    0.4
+       lookupOrError           Day23                 src/days/Day23.hs:(71,1)-(73,32) 397   10000000   10.3    0.4    10.3    0.4
+      doMoveMap.val3           Day23                 src/days/Day23.hs:50:9-41        398   10000000    0.1    0.0    10.7    0.4
+       lookupOrError           Day23                 src/days/Day23.hs:(71,1)-(73,32) 399   10000000   10.6    0.4    10.6    0.4
+      doMoveMap.val4           Day23                 src/days/Day23.hs:51:9-41        400   10000000    0.1    0.0    10.5    0.4
+       lookupOrError           Day23                 src/days/Day23.hs:(71,1)-(73,32) 401   10000000   10.4    0.4    10.4    0.4
+    getStartingMap             Day23                 src/days/Day23.hs:34:1-198       389          1    1.2    3.6     1.2    3.6
+ CAF:day23part5                Day23                 <no location info>               347          0    0.0    0.0     0.0    0.0
+  day23part2                   Day23                 src/days/Day23.hs:(37,1)-(41,26) 380          0    0.0    0.0     0.0    0.0
+ CAF:day23part6                Day23                 <no location info>               345          0    0.0    0.0     0.0    0.0
+  day23part2                   Day23                 src/days/Day23.hs:(37,1)-(41,26) 384          0    0.0    0.0     0.0    0.0
+   day23part2.two              Day23                 src/days/Day23.hs:39:9-59        385          0    0.0    0.0     0.0    0.0
+    lookupOrError              Day23                 src/days/Day23.hs:(71,1)-(73,32) 386          1    0.0    0.0     0.0    0.0
+ CAF:main                      Main                  app/Main.hs:31:1-4               375          0    0.0    0.0     0.0    0.0
+  main                         Main                  app/Main.hs:31:1-17              376          1    0.0    0.0     0.0    0.0
+ CAF:maxValue                  Day23                 src/days/Day23.hs:31:1-8         339          0    0.0    0.0     0.0    0.0
+  maxValue                     Day23                 src/days/Day23.hs:31:1-18        391          1    0.0    0.0     0.0    0.0
+ CAF:realInput                 Day23                 src/days/Day23.hs:10:1-9         340          0    0.0    0.0     0.0    0.0
+  realInput                    Day23                 src/days/Day23.hs:10:1-39        390          1    0.0    0.0     0.0    0.0
+ day23part2                    Day23                 src/days/Day23.hs:(37,1)-(41,26) 379          0    0.0    0.0     0.0    0.0
