@@ -1,0 +1,58 @@
+	Thu Dec 17 08:52 2020 Time and Allocation Profiling Report  (Final)
+
+	   advent2020-exe +RTS -N -p -RTS
+
+	total time  =        2.22 secs   (8211 ticks @ 1000 us, 8 processors)
+	total alloc = 11,604,828,992 bytes  (excludes profiling overheads)
+
+COST CENTRE             MODULE SRC                               %time %alloc
+
+doStep                  Day17  src/days/Day17.hs:(48,1)-(52,55)   42.0   43.4
+stepFn.aliveNeighbours  Day17  src/days/Day17.hs:58:9-98          30.0    0.0
+add                     Day17  src/days/Day17.hs:36:1-68           9.0    8.5
+getInterestingLocations Day17  src/days/Day17.hs:42:1-85           7.6   14.7
+getNeighbours           Day17  src/days/Day17.hs:45:1-47           7.6   25.0
+stepFn.neighbours       Day17  src/days/Day17.hs:57:9-55           1.6    5.5
+doStep.locs             Day17  src/days/Day17.hs:50:9-57           1.2    2.9
+
+
+                                                                                                             individual      inherited
+COST CENTRE                     MODULE                  SRC                               no.     entries  %time %alloc   %time %alloc
+
+MAIN                            MAIN                    <built-in>                        176          0    0.1    0.0   100.0  100.0
+ CAF                            GHC.Conc.Signal         <entire-module>                   290          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.IO.Encoding         <entire-module>                   274          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.IO.Encoding.Iconv   <entire-module>                   272          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.IO.Exception        <entire-module>                   266          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.IO.Handle.FD        <entire-module>                   264          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.IO.Handle.Internals <entire-module>                   263          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.IO.Handle.Text      <entire-module>                   262          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.Event.Thread        <entire-module>                   223          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.IO.FD               <entire-module>                   203          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.Event.Poll          <entire-module>                   194          0    0.0    0.0     0.0    0.0
+ CAF:day17part7                 Day17                   <no location info>                319          0    0.0    0.0     0.0    0.0
+ CAF:day17part9                 Day17                   <no location info>                320          0    0.0    0.0     0.0    0.0
+  day17part2                    Day17                   src/days/Day17.hs:(18,1)-(20,46)  353          1    0.0    0.0     0.0    0.0
+ CAF:directions                 Day17                   src/days/Day17.hs:39:1-10         316          0    0.0    0.0     0.0    0.0
+  directions                    Day17                   src/days/Day17.hs:39:1-142        364          1    0.0    0.0     0.0    0.0
+ CAF:getStartingMap_charToState Day17                   src/days/Day17.hs:33:11-21        317          0    0.0    0.0     0.0    0.0
+  getStartingMap                Day17                   src/days/Day17.hs:(29,1)-(33,32)  370          0    0.0    0.0     0.0    0.0
+   getStartingMap.charToState   Day17                   src/days/Day17.hs:33:11-32        371          1    0.0    0.0     0.0    0.0
+ CAF:main1                      Main                    <no location info>                350          0    0.0    0.0     0.0    0.0
+  main                          Main                    app/Main.hs:31:1-17               352          1    0.0    0.0     0.0    0.0
+ day17part2                     Day17                   src/days/Day17.hs:(18,1)-(20,46)  354          0    0.0    0.0    99.9  100.0
+  runConwayCube                 Day17                   src/days/Day17.hs:(24,1)-(25,82)  355          1    0.2    0.0    99.9  100.0
+   runConwayCube.m1             Day17                   src/days/Day17.hs:25:11-82        356          1    0.0    0.0    99.7  100.0
+    runConwayCube.m1.\          Day17                   src/days/Day17.hs:25:31-46        359          6    0.0    0.0    99.7  100.0
+     doStep                     Day17                   src/days/Day17.hs:(48,1)-(52,55)  360          6   42.0   43.4    99.7  100.0
+      stepFn                    Day17                   src/days/Day17.hs:(55,1)-(61,115) 363    6002748    0.1    0.0    44.8   35.7
+       stepFn.aliveNeighbours   Day17                   src/days/Day17.hs:58:9-98         368     141644   30.0    0.0    30.0    0.0
+       stepFn.myState           Day17                   src/days/Day17.hs:59:9-47         373     141644    0.5    0.0     0.5    0.0
+       stepFn.neighbours        Day17                   src/days/Day17.hs:57:9-55         366     141644    1.6    5.5    14.2   35.7
+        getNeighbours           Day17                   src/days/Day17.hs:45:1-47         367     141644    7.6   25.0    12.6   30.2
+         add                    Day17                   src/days/Day17.hs:36:1-68         369   11331520    5.0    5.2     5.0    5.2
+      doStep.locs               Day17                   src/days/Day17.hs:50:9-57         361          6    1.2    2.9    12.9   20.9
+       getInterestingLocations  Day17                   src/days/Day17.hs:42:1-85         362          6    7.6   14.7    11.6   18.0
+        add                     Day17                   src/days/Day17.hs:36:1-68         365    5928640    4.0    3.3     4.0    3.3
+    getStartingMap              Day17                   src/days/Day17.hs:(29,1)-(33,32)  357          1    0.0    0.0     0.0    0.0
+     getStartingMap.ls          Day17                   src/days/Day17.hs:31:15-30        358          1    0.0    0.0     0.0    0.0
