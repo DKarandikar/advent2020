@@ -63,7 +63,8 @@ library
       base >=4.7 && <5,
       containers,
       mtl,
-      parsec
+      parsec,
+      arithmoi
   default-language: Haskell2010
 
 executable advent2020-exe
